@@ -52,6 +52,7 @@ class AutoRec():
         self.train_cost_list = []
         self.test_cost_list = []
         self.test_rmse_list = []
+        self.test_mae_list = []
 
         self.result_path = result_path
         self.grad_clip = args.grad_clip
@@ -148,11 +149,14 @@ class AutoRec():
             numerator = np.sum(np.square(pre_numerator))
             denominator = self.num_test_ratings
             RMSE = np.sqrt(numerator / float(denominator))
+            MAE = np.sum(np.abs(pre_numerator)) / float(denominator)
 
             self.test_rmse_list.append(RMSE)
+            self.test_mae_list.append(MAE)
 
             print ("Testing //", "Epoch %d //" % (itr), " Total cost = {:.2f}".format(Cost), " RMSE = {:.5f}".format(RMSE),
-                   "Elapsed time : %d sec" % (time.time() - start_time))
+                   " MAE = {:.5f}".format(MAE),"Elapsed time : %d sec" % (time.time() - start_time))
+
             print ("=" * 100)
 
     def make_records(self):
